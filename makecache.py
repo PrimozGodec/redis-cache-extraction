@@ -101,13 +101,13 @@ def gen_redis_proto(*args):
         proto += str(arg) + '\r\n'
     return proto
 
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+images_dir = "images/"
 
 for model, model_server in [
     ("inception-v3", "inception_v3"), ("VGG-16", "vgg16"), ("VGG-19", "vgg19"),
     ("painters", "painters"), ("deeploc", "deeploc")]:
-
-    images_dir = "images/bone-healing"
 
     # call orange to upload all images
     run_embeddings(model, images_dir)
@@ -140,7 +140,7 @@ for model, model_server in [
 
     for dirpath, dirnames, filenames in datasets:
         for image in filenames:
-            if image != "index.html":
+            if image not in ["index.html", "README.md"]:
                 print(os.path.join(dirpath, image))
                 im = _load_image_or_none(os.path.join(dirpath, image))
                 h = model_server + md5_hash(im)
