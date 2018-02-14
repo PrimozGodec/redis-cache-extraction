@@ -104,6 +104,7 @@ def gen_redis_proto(*args):
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 images_dir = "images/"
+redis_embeddings = []
 
 for model, model_server in [
     ("inception-v3", "inception_v3"), ("VGG-16", "vgg16"), ("VGG-19", "vgg19"),
@@ -136,8 +137,6 @@ for model, model_server in [
 
     datasets = os.walk(images_dir)
 
-    redis_embeddings = []
-
     for dirpath, dirnames, filenames in datasets:
         for image in filenames:
             if image not in ["index.html", "README.md"]:
@@ -148,6 +147,6 @@ for model, model_server in [
                 redis_embeddings.append(h)
                 redis_embeddings.append(cache[h])
 
-    redis_format = gen_redis_proto(*redis_embeddings)
-    with open("tmp/redis_proto.txt", "w", encoding="utf-8") as f:
-        f.write(redis_format)
+redis_format = gen_redis_proto(*redis_embeddings)
+with open("tmp/redis_proto.txt", "w", encoding="utf-8") as f:
+    f.write(redis_format)
