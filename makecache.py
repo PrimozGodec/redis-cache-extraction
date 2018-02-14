@@ -64,7 +64,7 @@ def _load_image_from_url_or_local_path(file_path):
         return None
 
 
-def _load_image_or_none(file_path):
+def _load_image_or_none(file_path, model):
     image = _load_image_from_url_or_local_path(file_path)
 
     if image is None:
@@ -76,7 +76,7 @@ def _load_image_or_none(file_path):
         except ValueError:
             return None
 
-    image.thumbnail(MODELS["inception-v3"]["target_image_size"], LANCZOS)
+    image.thumbnail(MODELS[model]["target_image_size"], LANCZOS)
     image_bytes_io = BytesIO()
     image.save(image_bytes_io, format="JPEG")
     image.close()
@@ -141,7 +141,7 @@ for model, model_server in [
         for image in filenames:
             if image not in ["index.html", "README.md"]:
                 print(os.path.join(dirpath, image))
-                im = _load_image_or_none(os.path.join(dirpath, image))
+                im = _load_image_or_none(os.path.join(dirpath, image), model)
                 h = model_server + md5_hash(im)
                 redis_embeddings.append("SET")
                 redis_embeddings.append(h)
