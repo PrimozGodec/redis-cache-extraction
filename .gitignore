@@ -1,0 +1,4 @@
+images/
+tmp/*.json
+tmp/*.txt
+.idea
