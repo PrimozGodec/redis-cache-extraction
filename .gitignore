@@ -1,4 +1,4 @@
-images/
+images/*/*
 tmp/*.json
 tmp/*.txt
 tmp/*.rdb
