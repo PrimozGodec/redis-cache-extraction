@@ -15,5 +15,13 @@ def run_embeddings(model, image_dir):
         print(embeddings)
 
 
+
 if __name__ == "__main__":
-    run_embeddings("inception-v3")
+    images_dir = "images/"
+
+    for model, model_server in [
+        ("inception-v3", "inception_v3"), ("VGG-16", "vgg16"),
+        ("VGG-19", "vgg19"),
+        ("painters", "painters"), ("deeploc", "deeploc")]:
+        # call orange to upload all images
+        run_embeddings(model, images_dir)

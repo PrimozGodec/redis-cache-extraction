@@ -110,24 +110,6 @@ for model, model_server in [
     ("inception-v3", "inception_v3"), ("VGG-16", "vgg16"), ("VGG-19", "vgg19"),
     ("painters", "painters"), ("deeploc", "deeploc")]:
 
-    # call orange to upload all images
-    run_embeddings(model, images_dir)
-
-    # generate the cache dump
-    ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys()
-    ssh.connect("dev.bio.garaza.io", username="primoz")  # this is hyperion
-    (stdin, stdout, stderr) = ssh.exec_command(
-        "kubectl get pod | grep redis-redis | awk '{print $1;}'")
-    container = stdout.readline()[:-1]
-
-    retrieve_command = "kubectl cp default/{}:/bitnami/redis/data/dump.rdb " \
-                       "dump.rdb".format(container)
-
-    ssh.exec_command(retrieve_command)
-    ssh.close()
-
-    os.system("scp primoz@dev.bio.garaza.io:~/dump.rdb tmp")
     os.system('rdb --command json -k "{}.*" -f tmp/dump.json tmp/dump.rdb'
               .format(model_server))
 
